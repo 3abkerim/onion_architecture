@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { container } from "../../infrastructure/config/dependency-injection";
 import { ChangeDatesInputs, ChangeSeatsInputs, CreateConferenceInputs } from "../dto/conference.dto";
 import { RequestValidator } from "../utils/validate-request";
+import { ReserveSeat } from "../../usecases/reserve-seat";
 
 export const organizeConference = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -14,7 +15,8 @@ export const organizeConference = async (req: Request, res: Response, next: Next
             title: input.title,
             startDate: new Date(input.startDate),
             endDate: new Date(input.endDate),
-            seats: input.seats
+            seats: input.seats,
+            reservedSeats: 0,  
         })
 
         return res.jsonSuccess({id: result.id}, 201)
@@ -63,3 +65,21 @@ export const changeDates = async (req: Request, res: Response, next: NextFunctio
         next(error);
     }
 };
+
+export const reserveSeat = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { conferenceId } = req.params;
+  
+      await container('reserveSeatUsecase').execute({
+        user: req.user,
+        conferenceId,
+      });
+  
+      return res.jsonSuccess(
+        { message: `Seat reserved successfully for conference with id: ${conferenceId}` },
+        200
+      );
+    } catch (error) {
+      next(error);
+    }
+  };

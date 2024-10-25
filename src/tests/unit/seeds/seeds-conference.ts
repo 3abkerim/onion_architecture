@@ -10,6 +10,6 @@ export const testConferences = {
         startDate: new Date('2024-01-05T10:00:00.000Z'),
         endDate: new Date('2024-01-05T11:00:00.000Z'),
         seats: 50,
-        reservedSeats: 40
+        reservedSeats: 0
     })
 }
