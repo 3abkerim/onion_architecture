@@ -11,6 +11,7 @@ type OrganizeConferenceRequest = {
   startDate: Date;
   endDate: Date;
   seats: number;
+  reservedSeats: number;
 };
 
 type OrganizeConferenceResponse = {
@@ -21,7 +22,7 @@ export class OrganizeConference {
   //rapid
   constructor(private readonly repository: IConferenceRepository, private readonly idGenerator: IIDGenerator, private readonly dateGenerator: IDateGenerator, private readonly messageBroker: IMessageBroker) {}
 
-  async execute({ user, title, startDate, endDate, seats }: OrganizeConferenceRequest): Promise<OrganizeConferenceResponse> {
+  async execute({ user, title, startDate, endDate, seats , reservedSeats }: OrganizeConferenceRequest): Promise<OrganizeConferenceResponse> {
     const id = this.idGenerator.generate();
 
     const conference = new Conference({
@@ -31,22 +32,27 @@ export class OrganizeConference {
       startDate,
       endDate,
       seats,
+      reservedSeats,
     });
 
     if (conference.isTooClose(this.dateGenerator.now())) {
       throw new Error("Conference must happen in at least 3 days");
     }
 
-    if (conference.hasNotEnoughSeats()) {
+    if (conference.hasNotEnoughSeats(seats)) {
       throw new Error("Conference has not enough seats");
     }
 
-    if (conference.hasTooManySeats()) {
+    if (conference.hasTooManySeats(seats)) {
       throw new Error("Conference has too many seats");
     }
 
     if (conference.isTooLong()) {
       throw new Error("Conference is too long (> 3 hours)");
+    }
+
+    if (conference.hasLessSeatsThanReserved(seats)){
+      throw new Error("Conference's seats can't be reduced")
     }
 
     await this.repository.create(conference);

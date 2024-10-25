@@ -28,6 +28,7 @@ describe("Usecase: Organize a conference", () => {
       startDate: new Date("2024-01-04T10:00:00.000Z"),
       endDate: new Date("2024-01-04T11:00:00.000Z"),
       seats: 50,
+      reservedSeats: 0,
     };
 
     it("should return id", async () => {
@@ -64,6 +65,7 @@ describe("Usecase: Organize a conference", () => {
       startDate: new Date("2024-01-02T10:00:00.000Z"),
       endDate: new Date("2024-01-02T11:00:00.000Z"),
       seats: 50,
+      reservedSeats: 0,
     };
 
     it("should throw an error", async () => {
@@ -86,6 +88,7 @@ describe("Usecase: Organize a conference", () => {
       startDate: new Date("2024-01-04T10:00:00.000Z"),
       endDate: new Date("2024-01-04T11:00:00.000Z"),
       seats: 15,
+      reservedSeats: 0,
     };
     it("should throw an error", async () => {
       await expect(usecase.execute(payload)).rejects.toThrow("Conference has not enough seats");
@@ -99,6 +102,7 @@ describe("Usecase: Organize a conference", () => {
       startDate: new Date("2024-01-04T10:00:00.000Z"),
       endDate: new Date("2024-01-04T11:00:00.000Z"),
       seats: 1001,
+      reservedSeats: 0,
     };
     it("should throw an error", async () => {
       await expect(usecase.execute(payload)).rejects.toThrow("Conference has too many seats");
@@ -112,6 +116,7 @@ describe("Usecase: Organize a conference", () => {
       startDate: new Date("2024-01-04T10:00:00.000Z"),
       endDate: new Date("2024-01-04T14:00:00.000Z"),
       seats: 50,
+      reservedSeats: 0,
     };
     it("should throw an error", async () => {
       await expect(usecase.execute(payload)).rejects.toThrow("Conference is too long (> 3 hours)");

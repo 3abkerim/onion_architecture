@@ -78,4 +78,16 @@ describe('Usecase: Change seats', () => {
             await expect(usecase.execute(payload)).rejects.toThrow("You are not allowed to change this conference")
         })
     })
+
+    describe("Scenario: Reduce conference seats to fewer than the number of seats already reserved", () => {
+        const payload = {
+          seats: 20,
+          conferenceId: testConferences.conference.props.id,
+          user: testUsers.johnDoe,
+        };
+    
+        it("should throw an error", async () => {
+          await expect(usecase.execute(payload)).rejects.toThrow("You are not allowed to reduce the seats of this conference");
+        });
+      });
 })
