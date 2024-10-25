@@ -16,6 +16,17 @@ export class Conference {
         public props: ConferenceProps
     ) {}
 
+    hasAvailableSeats(): boolean {
+        return this.props.reservedSeats < this.props.seats;
+    }
+
+    reserveSeat(): void {
+        if (!this.hasAvailableSeats()) {
+          throw new Error("No seats available");
+        }
+        this.props.reservedSeats += 1;
+      }
+
     hasLessSeatsThanReserved(newSeats: number): boolean {
         return newSeats < this.props.reservedSeats;
     }
