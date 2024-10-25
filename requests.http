@@ -1,0 +1,14 @@
+@prefix= Basic
+@token= am9obmRvZUBnbWFpbC5jb206cXdlcnR5
+
+### Create a conference
+POST http://localhost:8000/conference
+Content-Type: application/json
+Authorization: {{prefix}} {{token}}
+
+{
+    "title": "Discover NextJS",
+    "seats": 50,
+    "startDate": "2024-10-24T10:00:00.000Z",
+    "endDate": "2024-10-24T11:00:00.000Z"
+}
