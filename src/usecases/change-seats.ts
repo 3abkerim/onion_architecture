@@ -25,12 +25,13 @@ export class ChangeSeats implements IExecutable<ChangeSeatsRequest, ChangeSeatsR
             throw new Error("You are not allowed to change this conference")
         }
 
-        conference.update({seats})
+        if(conference.hasNotEnoughSeats(seats)) throw new Error("Conference has not enough seats")
 
-        if(conference.hasTooManySeats()) throw new Error("Conference has too many seats")
-        if(conference.hasNotEnoughSeats()) throw new Error("Conference has not enough seats")
+        if (conference.hasLessSeatsThanReserved(seats)) throw new Error("You are not allowed to reduce the seats of this conference");
+
+        if(conference.hasTooManySeats(seats)) throw new Error("Conference has too many seats")
         
-
+        conference.update({seats})
         await this.repository.update(conference)
     }
 }

@@ -8,6 +8,7 @@ type ConferenceProps = {
     startDate: Date
     endDate: Date
     seats: number
+    reservedSeats: number
 }
 
 export class Conference {
@@ -15,16 +16,20 @@ export class Conference {
         public props: ConferenceProps
     ) {}
 
+    hasLessSeatsThanReserved(newSeats: number): boolean {
+        return newSeats < this.props.reservedSeats;
+    }
+
     isTooClose(now: Date) {
         return differenceInDays(this.props.startDate, now) < 3
     }
 
-    hasNotEnoughSeats() {
-        return this.props.seats < 20
+    hasNotEnoughSeats(newSeats: number): boolean {
+        return newSeats < 20;
     }
 
-    hasTooManySeats() {
-        return this.props.seats > 1000
+    hasTooManySeats(newSeats: number): boolean {
+        return newSeats > 1000;
     }
 
     isTooLong() {
